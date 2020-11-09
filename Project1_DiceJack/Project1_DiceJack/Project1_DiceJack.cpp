@@ -2,9 +2,32 @@
 //
 #include <iostream>
 #include <random>
+//variables
 bool gameOver = false;
 int userInput = 0;
 int credits = 100;
+
+//The computer will use this to take the its turn instead of rolling four dice automatically. As A player
+//who plays this game would consider his/her own current score when deciding if they should take the risk to reroll
+// the dice I think the computer should take the same precursion. Therefore if the current score of the computer is
+// bigger than or equal to 17 the computer will exit its turn. Returns a vaule of type int for the computer score.
+int AIRound()
+{
+    int currentScore = 0;
+    //generating random seed
+    std::random_device random;
+    std::mt19937 compGen = std::mt19937(random());
+    //define our dice
+    std::uniform_int_distribution<int> compDice(1, 6);
+    while(currentScore<17)
+    {
+        for(int i = 0; i<2;i++)
+        {
+            currentScore += compDice(compGen);
+        }
+    }
+    return currentScore;
+}
 //the main functionality for playing a round of dice jack it takes a bet from the player and start a playing rond given the input taken is
 //correct it continue to play a round
 void PlayRound()
@@ -50,15 +73,12 @@ void PlayRound()
                 std::cin >> answer;
                 if (answer == 1)
                 {
-                    int computerscore = 0;
-                    for (int i = 0; i < 4; i++)
-                    {
-                        computerscore += dice(gen);
-                    }
+                    int computerscore = AIRound();
+                    
                     if (playerTotal > computerscore || computerscore >= 21)
                     {
                         credits += bet;
-                        std::cout << "You won this rond remaining credits are " << credits;
+                        std::cout << "\nYou won this rond remaining credits are " << credits;
                         playing = false;
                     }
                     else if (computerscore > playerTotal)
@@ -97,7 +117,7 @@ void GameLoop()
             }
             else if (credits >= 300)
             {
-                std::cout<<"Congratulations you won";
+                std::cout<<"\nCongratulations you won";
                 credits = 100;
                 gameOver = true;
             }
