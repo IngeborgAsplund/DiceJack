@@ -35,7 +35,7 @@ int DrawNewcard()
     int cardId = drawCard(random);//get the index of the card we want to draw from the array
 
     int cardvalue = cards[cardId];//picking a card on the earlier generated position.
-    cards.pop_back[cardId];// remove the actual card from the array
+    cards.erase(cards.begin() + cardId);// remove the actual card from the array
     return cardvalue;// return the value of the drawn card
 }
 //The computer will use this to take the its turn instead of rolling four dice automatically. As A player
@@ -52,10 +52,7 @@ int AIRound()
     std::uniform_int_distribution<int> compDice(1, 6);
     while(currentScore<17)
     {
-        for(int i = 0; i<2;i++)
-        {
-            currentScore += compDice(compGen);
-        }
+        currentScore += DrawNewcard();
     }
     return currentScore;
 }
@@ -85,14 +82,9 @@ void PlayRound()
         //debug line
         std::cout << "Play round with a bet of " << bet << "\n";
         while(playing)
-        {
-            
-            //roll dice two times
-            for(int i = 0; i<2; i ++)
-            {
-                playerTotal +=dice(gen);
-            }
-           
+        {           
+            playerTotal += DrawNewcard();
+
             if(playerTotal>=21)
             {
                 std::cout <<"\n"<<"You went bust, your current score is "<<playerTotal;
@@ -136,7 +128,7 @@ void GameLoop()
 {
     while (!gameOver)
     {
-        std::cout <<"\n"<<"Welcome to the game of dice jack.\nPlease input 1 to play a round and 2 to quit.\n";
+        std::cout <<"\n\n"<<"Welcome to the game of dice jack.\nPlease input 1 to play a round and 2 to quit.\n";
         std::cin >> userInput;
 
         if (userInput == 1)
