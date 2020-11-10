@@ -6,7 +6,38 @@
 bool gameOver = false;
 int userInput = 0;
 int credits = 100;
+std::vector<int> cards;
 
+
+// this function clears the array cards of any elements then fills it with the 52 cards usually found in a deck of cards
+// called at the start of every round this function will technically refill 
+void ResetAndFillArray()
+{
+    //check if we have more than zero elements in the array and if so we want to clear the array of its elemets
+    if(cards.size()>0)
+       cards.clear();
+    //for loop that adds for cards for each iteration of the loop.
+    for(int i = 1;i<=13;i ++)
+    {
+        cards.push_back(i);
+        cards.push_back(i);
+        cards.push_back(i);
+        cards.push_back(i);
+    }
+}
+//return the value of a card randomly drawn from the deck of cards, this are added instead of the combination of two dice
+// each time a player or ai takes a card. The cards is then added to the total score
+int DrawNewcard()
+{
+    std::random_device random;
+    std::mt19937 gen = std::mt19937(random());
+    std::uniform_int_distribution<int>drawCard(0,cards.size());    
+    int cardId = drawCard(random);//get the index of the card we want to draw from the array
+
+    int cardvalue = cards[cardId];//picking a card on the earlier generated position.
+    cards.pop_back[cardId];// remove the actual card from the array
+    return cardvalue;// return the value of the drawn card
+}
 //The computer will use this to take the its turn instead of rolling four dice automatically. As A player
 //who plays this game would consider his/her own current score when deciding if they should take the risk to reroll
 // the dice I think the computer should take the same precursion. Therefore if the current score of the computer is
@@ -32,6 +63,8 @@ int AIRound()
 //correct it continue to play a round
 void PlayRound()
 {
+    //refill the array
+    ResetAndFillArray();
     //set the bet to 0
     int bet = 0;
     //ask user for input and present conditions
